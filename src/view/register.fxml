@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="controller.RegisterController"
+            prefWidth="700" prefHeight="500"
+            style="-fx-background-color: linear-gradient(to bottom right, #000428, #004e92);">
+
+    <VBox alignment="CENTER" spacing="12.0" layoutX="150.0" layoutY="50.0" prefWidth="400.0">
+        <Label text="📝 SmartBank360 Registration" style="-fx-text-fill: white; -fx-font-size: 20px;" />
+
+        <TextField fx:id="nameField" promptText="Full Name" />
+        <TextField fx:id="emailField" promptText="Email" />
+        <TextField fx:id="phoneField" promptText="Phone Number" />
+        <TextField fx:id="usernameField" promptText="Username" />
+        <PasswordField fx:id="passwordField" promptText="Password" />
+        <PasswordField fx:id="confirmPasswordField" promptText="Confirm Password" />
+
+        <Button fx:id="registerButton" text="Register" styleClass="glow-button" />
+
+        <Hyperlink fx:id="backToLoginLink" text="🔙 Back to Login" style="-fx-text-fill: white;" />
+    </VBox>
+</AnchorPane>

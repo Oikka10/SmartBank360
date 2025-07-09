@@ -1,0 +1,40 @@
+/* login.css */
+
+.root {
+    -fx-font-family: "Segoe UI", sans-serif;
+}
+
+.text-field,
+.password-field {
+    -fx-background-radius: 10;
+    -fx-border-radius: 10;
+    -fx-padding: 10;
+    -fx-font-size: 14px;
+    -fx-border-color: #ffffff30;
+    -fx-background-color: #ffffff20;
+    -fx-text-fill: white;
+}
+
+.label {
+    -fx-text-fill: white;
+}
+
+.hyperlink {
+    -fx-text-fill: #00BFFF;
+    -fx-underline: true;
+}
+
+.glow-button {
+    -fx-background-color: linear-gradient(to right, #00c6ff, #0072ff);
+    -fx-text-fill: white;
+    -fx-background-radius: 20;
+    -fx-border-radius: 20;
+    -fx-font-size: 14px;
+    -fx-padding: 10 20;
+    -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.3), 5,0,0,1);
+}
+
+.glow-button:hover {
+    -fx-background-color: linear-gradient(to right, #0072ff, #00c6ff);
+    -fx-cursor: hand;
+}

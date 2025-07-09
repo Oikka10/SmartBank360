@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="controller.LoginController"
+            prefWidth="600.0" prefHeight="400.0"
+            style="-fx-background-color: linear-gradient(to bottom right, #0f2027, #203a43, #2c5364);">
+
+    <VBox alignment="CENTER" spacing="15.0" layoutX="100.0" layoutY="50.0" prefWidth="400.0" prefHeight="300.0">
+        <Label text="🔐 SmartBank360 Login" style="-fx-text-fill: white; -fx-font-size: 20px;" />
+
+        <TextField fx:id="usernameField" promptText="Username" />
+        <PasswordField fx:id="passwordField" promptText="Password" />
+
+        <Button fx:id="loginButton" text="Login" styleClass="glow-button" />
+
+        <HBox alignment="CENTER">
+            <Label text="Don't have an account?" style="-fx-text-fill: white;" />
+            <Hyperlink fx:id="registerLink" text="Register" />
+        </HBox>
+    </VBox>
+</AnchorPane>

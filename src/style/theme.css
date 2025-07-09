@@ -1,0 +1,10 @@
+.root {
+    -fx-font-family: 'Poppins', sans-serif;
+    -fx-background-color: #f7f7f7;
+}
+.button {
+    -fx-background-color: #1976d2;
+    -fx-text-fill: white;
+    -fx-cursor: hand;
+    -fx-background-radius: 8;
+}
