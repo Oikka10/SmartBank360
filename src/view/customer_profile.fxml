@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="controller.CustomerProfileController">
+    <center>
+        <VBox spacing="15" alignment="CENTER">
+            <padding>
+                <Insets top="25" bottom="25" left="30" right="30"/>
+            </padding>
+
+            <Label text="👤 My Profile" style="-fx-font-size: 22px; -fx-font-weight: bold;" />
+
+            <GridPane hgap="15" vgap="12">
+                <Label text="👤 Full Name:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+                <TextField fx:id="nameField" prefWidth="250" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+                <Label text="📞 Mobile:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+                <TextField fx:id="mobileField" prefWidth="250" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+                <Label text="🆔 NID:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+                <TextField fx:id="nidField" prefWidth="250" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+                <Label text="🏠 Address:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+                <TextField fx:id="addressField" prefWidth="250" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+                <Label text="📧 Email:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+                <TextField fx:id="emailField" prefWidth="250" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+            </GridPane>
+
+            <HBox spacing="20">
+                <Button text="✏️ Edit Info" onAction="#enableEdit" />
+                <Button text="💾 Save Changes" onAction="#saveChanges" />
+            </HBox>
+
+            <Label fx:id="statusLabel" style="-fx-text-fill: green;"/>
+        </VBox>
+    </center>
+</BorderPane>

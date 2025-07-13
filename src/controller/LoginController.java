@@ -1,11 +1,12 @@
 package controller;
 
+import controller.CustomerDashboardController;
 import db.DatabaseConnection;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
+import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.fxml.FXMLLoader;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 
 import java.sql.Connection;
@@ -14,23 +15,15 @@ import java.sql.ResultSet;
 
 public class LoginController {
 
-    @FXML
-    private TextField usernameField;
-
-    @FXML
-    private PasswordField passwordField;
-
-    @FXML
-    private Button loginButton;
-
-    @FXML
-    private Hyperlink registerLink;
+    @FXML private TextField usernameField;
+    @FXML private PasswordField passwordField;
+    @FXML private Button loginButton;
+    @FXML private Hyperlink registerLink;
 
     @FXML
     public void initialize() {
         loginButton.setOnAction(e -> handleLogin());
         registerLink.setOnAction(e -> showRegisterMessage());
-
         usernameField.setOnAction(e -> handleLogin());
         passwordField.setOnAction(e -> handleLogin());
     }
@@ -46,16 +39,27 @@ public class LoginController {
 
         try {
             Connection conn = DatabaseConnection.connect();
-            String sql = "SELECT * FROM customers WHERE username = ? AND password = ?";
+            String sql = "SELECT * FROM users WHERE username = ? AND password = ?";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, username);
             stmt.setString(2, password);
-
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                showAlert("✅ Login Successful", "Welcome, " + rs.getString("name") + "!");
-                openCustomerDashboard(); // Will be created next
+                String role = rs.getString("role");
+                switch (role) {
+                    case "admin":
+                        openDashboard("/view/admin_dashboard.fxml");
+                        break;
+                    case "officer":
+                        openDashboard("/view/officer_dashboard.fxml");
+                        break;
+                    case "customer":
+                        openCustomerDashboard(username);
+                        break;
+                    default:
+                        showAlert("❌ Error", "Invalid user role.");
+                }
             } else {
                 showAlert("❌ Login Failed", "Invalid username or password.");
             }
@@ -66,14 +70,34 @@ public class LoginController {
         }
     }
 
-    private void openCustomerDashboard() {
+    private void openDashboard(String fxmlPath) {
         try {
-            Parent root = FXMLLoader.load(getClass().getResource("/view/customer_dashboard.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource(fxmlPath));
             Stage stage = (Stage) loginButton.getScene().getWindow();
-            Scene scene = new Scene(root);
-            stage.setScene(scene);
+            stage.setScene(new Scene(root));
+            stage.show();
         } catch (Exception e) {
             e.printStackTrace();
+            showAlert("❌ Error", "Could not open dashboard.");
+        }
+    }
+
+    private void openCustomerDashboard(String username) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/customer_dashboard.fxml"));
+            Parent root = loader.load();
+
+            // ✅ Set username in controller
+            CustomerDashboardController controller = loader.getController();
+            controller.setCurrentUsername(username);
+
+            Stage stage = (Stage) loginButton.getScene().getWindow();
+            stage.setScene(new Scene(root));
+            stage.show();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            showAlert("❌ Error", "Could not open customer dashboard.");
         }
     }
 
@@ -82,7 +106,6 @@ public class LoginController {
             Parent root = FXMLLoader.load(getClass().getResource("/view/register.fxml"));
             Stage stage = (Stage) loginButton.getScene().getWindow();
             Scene scene = new Scene(root);
-            scene.getStylesheets().add(getClass().getResource("/style/login.css").toExternalForm());
             stage.setScene(scene);
         } catch (Exception e) {
             e.printStackTrace();

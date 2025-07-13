@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="controller.CreateAccountController"
+      alignment="CENTER" spacing="12">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="📝 Open New Bank Account" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+    <HBox spacing="10">
+        <Label text="Account Type:" />
+        <ComboBox fx:id="accountTypeBox" prefWidth="200"/>
+    </HBox>
+
+    <HBox spacing="10">
+        <Label text="Branch:" />
+        <ComboBox fx:id="branchBox" prefWidth="200"/>
+    </HBox>
+
+    <HBox spacing="10">
+        <Label text="Currency:" />
+        <ComboBox fx:id="currencyBox" prefWidth="200"/>
+    </HBox>
+
+    <HBox spacing="10">
+        <Label text="Initial Deposit (৳):" />
+        <TextField fx:id="depositField" prefWidth="200"/>
+    </HBox>
+
+    <HBox spacing="10">
+        <Label text="Need Debit Card?" />
+        <CheckBox fx:id="cardCheck"/>
+    </HBox>
+
+    <HBox spacing="10">
+        <Label text="Nominee Name:" />
+        <TextField fx:id="nomineeField" prefWidth="200"/>
+    </HBox>
+
+    <HBox spacing="10">
+        <Label text="Mobile Number:" />
+        <TextField fx:id="mobileField" prefWidth="200"/>
+    </HBox>
+
+    <HBox spacing="10">
+        <Label text="National ID (NID):" />
+        <TextField fx:id="nidField" prefWidth="200"/>
+    </HBox>
+
+    <HBox spacing="10">
+        <Label text="Address:" />
+        <TextField fx:id="addressField" prefWidth="200"/>
+    </HBox>
+
+    <HBox spacing="10">
+        <Label text="Email:" />
+        <TextField fx:id="emailField" prefWidth="200"/>
+    </HBox>
+
+    <HBox spacing="10">
+        <Label text="Create Password:" />
+        <PasswordField fx:id="passwordField" prefWidth="200"/>
+    </HBox>
+
+    <HBox spacing="10">
+        <Label text="Confirm Password:" />
+        <PasswordField fx:id="confirmPasswordField" prefWidth="200"/>
+    </HBox>
+
+    <Button fx:id="submitBtn" text="✅ Create Account"
+            style="-fx-background-color: #27ae60; -fx-text-fill: white;" />
+
+    <Label fx:id="messageLabel" style="-fx-text-fill: green;"/>
+</VBox>

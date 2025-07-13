@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="controller.SendMoneyController"
+      spacing="15" alignment="CENTER">
+    <padding><Insets top="20" right="20" bottom="20" left="20"/></padding>
+
+    <Label text="💳 Send Money / Recharge / Pay Bills" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+
+    <HBox spacing="10">
+        <Label text="Transaction Type:"/>
+        <ComboBox fx:id="transactionTypeBox" prefWidth="220"/>
+    </HBox>
+
+    <HBox spacing="10">
+        <Label text="To (Account/Mobile No):"/>
+        <TextField fx:id="recipientField" prefWidth="220"/>
+    </HBox>
+
+    <HBox spacing="10">
+        <Label text="Amount (৳):"/>
+        <TextField fx:id="amountField" prefWidth="220"/>
+    </HBox>
+
+    <Button text="✅ Confirm Transaction" fx:id="sendBtn" style="-fx-background-color: #27ae60; -fx-text-fill: white;"/>
+    <Label fx:id="statusLabel" style="-fx-text-fill: green;"/>
+</VBox>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="controller.ViewBalanceController"
+      spacing="20" alignment="CENTER" style="-fx-background-color: white;">
+    <padding>
+        <Insets top="30" bottom="30" left="40" right="40"/>
+    </padding>
+
+    <Label text="🏦 Your Account Summary" style="-fx-font-size: 22px; -fx-font-weight: bold; -fx-text-fill: #2C3E50;" />
+
+    <GridPane hgap="20" vgap="15">
+        <Label text="👤 Name:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <Label fx:id="nameLabel" style="-fx-font-weight: bold;" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <Label text="💳 Account No:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <Label fx:id="accountLabel" style="-fx-font-weight: bold;" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="💰 Balance (৳):" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <Label fx:id="balanceLabel" style="-fx-font-size: 18px; -fx-text-fill: green;" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+    </GridPane>
+
+    <Button text="🔙 Back" onAction="#handleClose" style="-fx-background-color: #3498db; -fx-text-fill: white;"/>
+</VBox>

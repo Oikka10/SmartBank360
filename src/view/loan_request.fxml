@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml" fx:controller="controller.LoanRequestController"
+      spacing="15" alignment="CENTER">
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <Label text="💰 Apply for Loan" style="-fx-font-size: 20px; -fx-font-weight: bold;" />
+
+    <HBox spacing="10">
+        <Label text="Loan Type:" />
+        <ComboBox fx:id="loanTypeBox" prefWidth="200"/>
+    </HBox>
+
+    <HBox spacing="10">
+        <Label text="Amount (৳):" />
+        <TextField fx:id="amountField" prefWidth="200"/>
+    </HBox>
+
+    <HBox spacing="10">
+        <Label text="Repayment Duration (months):" />
+        <TextField fx:id="durationField" prefWidth="200"/>
+    </HBox>
+
+    <HBox spacing="10">
+        <Label text="Reason:" />
+        <TextField fx:id="reasonField" prefWidth="300"/>
+    </HBox>
+
+    <HBox spacing="10">
+        <Label text="Linked Account ID:" />
+        <TextField fx:id="accountIdField" prefWidth="100"/>
+    </HBox>
+
+    <Button fx:id="submitBtn" text="✅ Submit Loan Request"
+            style="-fx-background-color: #2ecc71; -fx-text-fill: white;" />
+
+    <Label fx:id="messageLabel" style="-fx-text-fill: green;" />
+</VBox>

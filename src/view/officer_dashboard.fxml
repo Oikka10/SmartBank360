@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.OfficerDashboardController"
+            stylesheets="@../style/officer_styles.css"
+            prefWidth="1280" prefHeight="720">
+
+    <!-- top bar -->
+    <top>
+        <HBox styleClass="top-bar" alignment="CENTER_LEFT">
+            <padding><Insets top="15" bottom="15" left="25" right="25"/></padding>
+            <Label text="SmartBank360 – Officer Dashboard" styleClass="top-title"/>
+            <Pane HBox.hgrow="ALWAYS"/>
+            <Label fx:id="notificationBadge" text="🔔 0" styleClass="notification-badge"/>
+            <Button text="Logout" onAction="#handleLogout" styleClass="logout-button"/>
+        </HBox>
+    </top>
+
+    <!-- sidebar -->
+    <left>
+        <VBox spacing="10" styleClass="sidebar" prefWidth="200">
+            <padding><Insets top="25" left="15" right="15" bottom="15"/></padding>
+            <Button text="📊 Dashboard"        onAction="#showDashboard" styleClass="sidebar-button"/>
+            <Button text="🔄 View Requests"    onAction="#showAccounts"  styleClass="sidebar-button"/>
+            <Button text="💼 Loan Requests"    onAction="#showLoans"     styleClass="sidebar-button"/>
+            <Button text="📦 Card Requests"    onAction="#showCards"     styleClass="sidebar-button"/>
+            <Button text="👥 Manage Customers" onAction="#showCustomers" styleClass="sidebar-button"/>
+        </VBox>
+    </left>
+
+    <!-- main stack -->
+    <center>
+        <StackPane fx:id="mainContent">
+
+            <!-- Dashboard -->
+            <VBox fx:id="dashboardSection" spacing="20">
+                <Label text="👋 Welcome, Officer!" styleClass="dashboard-welcome"/>
+                <HBox spacing="20">
+                    <VBox styleClass="stat-card"><Label text="Pending Accounts" styleClass="stat-label"/><Label fx:id="accStat"  text="--" styleClass="stat-value"/></VBox>
+                    <VBox styleClass="stat-card"><Label text="Loan Requests"     styleClass="stat-label"/><Label fx:id="loanStat" text="--" styleClass="stat-value"/></VBox>
+                    <VBox styleClass="stat-card"><Label text="Card Requests"     styleClass="stat-label"/><Label fx:id="cardStat" text="--" styleClass="stat-value"/></VBox>
+                </HBox>
+                <BarChart fx:id="barChart" prefHeight="260" prefWidth="800" legendVisible="false">
+                    <xAxis><CategoryAxis label="Type"/></xAxis>
+                    <yAxis><NumberAxis  label="Count"/></yAxis>
+                </BarChart>
+            </VBox>
+
+            <!-- Accounts -->
+            <VBox fx:id="accountSection" spacing="15" visible="false" managed="false">
+                <HBox spacing="10"><Label text="📋 Filter:"/><ComboBox fx:id="statusFilterCombo" prefWidth="200" onAction="#filterByStatus"/></HBox>
+                <TableView fx:id="accountTable" prefHeight="350">
+                    <columns>
+                        <TableColumn fx:id="colId"     text="ID"      prefWidth="50"/>
+                        <TableColumn fx:id="colName"   text="Nominee" prefWidth="150"/>
+                        <TableColumn fx:id="colMobile" text="Mobile"  prefWidth="100"/>
+                        <TableColumn fx:id="colType"   text="Type"    prefWidth="120"/>
+                        <TableColumn fx:id="colBranch" text="Branch"  prefWidth="100"/>
+                        <TableColumn fx:id="colAction" text="Action"  prefWidth="120"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <!-- Loans -->
+            <VBox fx:id="loanSection" spacing="15" visible="false" managed="false">
+                <TableView fx:id="loanTable" prefHeight="350">
+                    <columns>
+                        <TableColumn fx:id="loanIdCol"       text="ID"       prefWidth="50"/>
+                        <TableColumn fx:id="loanUserCol"     text="User"     prefWidth="120"/>
+                        <TableColumn fx:id="loanTypeCol"     text="Type"     prefWidth="100"/>
+                        <TableColumn fx:id="loanAmountCol"   text="Amount"   prefWidth="100"/>
+                        <TableColumn fx:id="loanDurationCol" text="Duration" prefWidth="100"/>
+                        <TableColumn fx:id="loanReasonCol"   text="Reason"   prefWidth="180"/>
+                        <TableColumn fx:id="loanStatusCol"   text="Status"   prefWidth="90"/>
+                        <TableColumn fx:id="loanActionCol"   text="Action"   prefWidth="120"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <!-- Cards -->
+            <VBox fx:id="cardSection" spacing="15" visible="false" managed="false">
+                <TableView fx:id="cardTable" prefHeight="350">
+                    <columns>
+                        <TableColumn fx:id="cardIdCol"      text="ID"      prefWidth="50"/>
+                        <TableColumn fx:id="cardUserCol"    text="User"    prefWidth="120"/>
+                        <TableColumn fx:id="cardTypeCol"    text="Type"    prefWidth="100"/>
+                        <TableColumn fx:id="cardMobileCol"  text="Mobile"  prefWidth="120"/>
+                        <TableColumn fx:id="cardAddressCol" text="Address" prefWidth="200"/>
+                        <TableColumn fx:id="cardStatusCol"  text="Status"  prefWidth="90"/>
+                        <TableColumn fx:id="cardActionCol"  text="Action"  prefWidth="120"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+        </StackPane>
+    </center>
+</BorderPane>
