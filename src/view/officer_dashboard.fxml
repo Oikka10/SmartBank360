@@ -10,7 +10,6 @@
             stylesheets="@../style/officer_styles.css"
             prefWidth="1280" prefHeight="720">
 
-    <!-- top bar -->
     <top>
         <HBox styleClass="top-bar" alignment="CENTER_LEFT">
             <padding><Insets top="15" bottom="15" left="25" right="25"/></padding>
@@ -21,23 +20,39 @@
         </HBox>
     </top>
 
-    <!-- sidebar -->
     <left>
         <VBox spacing="10" styleClass="sidebar" prefWidth="200">
             <padding><Insets top="25" left="15" right="15" bottom="15"/></padding>
-            <Button text="📊 Dashboard"        onAction="#showDashboard" styleClass="sidebar-button"/>
-            <Button text="🔄 View Requests"    onAction="#showAccounts"  styleClass="sidebar-button"/>
-            <Button text="💼 Loan Requests"    onAction="#showLoans"     styleClass="sidebar-button"/>
-            <Button text="📦 Card Requests"    onAction="#showCards"     styleClass="sidebar-button"/>
+            <Button text="📊 Dashboard" onAction="#showDashboard" styleClass="sidebar-button"/>
+
+            <Button text="" onAction="#showAccounts" styleClass="sidebar-button"> <graphic>
+                <StackPane>
+                    <Label text="🔄 View Requests" style="-fx-text-fill: white;"/> <Label fx:id="dotAccount" text="●" visible="false" styleClass="red-dot"/>
+                </StackPane>
+            </graphic>
+            </Button>
+
+            <Button text="" onAction="#showLoans" styleClass="sidebar-button"> <graphic>
+                <StackPane>
+                    <Label text="💼 Loan Requests" style="-fx-text-fill: white;"/> <Label fx:id="dotLoan" text="●" visible="false" styleClass="red-dot"/>
+                </StackPane>
+            </graphic>
+            </Button>
+
+            <Button text="" onAction="#showCards" styleClass="sidebar-button"> <graphic>
+                <StackPane>
+                    <Label text="📦 Card Requests" style="-fx-text-fill: white;"/> <Label fx:id="dotCard" text="●" visible="false" styleClass="red-dot"/>
+                </StackPane>
+            </graphic>
+            </Button>
+
             <Button text="👥 Manage Customers" onAction="#showCustomers" styleClass="sidebar-button"/>
         </VBox>
     </left>
 
-    <!-- main stack -->
     <center>
         <StackPane fx:id="mainContent">
 
-            <!-- Dashboard -->
             <VBox fx:id="dashboardSection" spacing="20">
                 <Label text="👋 Welcome, Officer!" styleClass="dashboard-welcome"/>
                 <HBox spacing="20">
@@ -51,7 +66,6 @@
                 </BarChart>
             </VBox>
 
-            <!-- Accounts -->
             <VBox fx:id="accountSection" spacing="15" visible="false" managed="false">
                 <HBox spacing="10"><Label text="📋 Filter:"/><ComboBox fx:id="statusFilterCombo" prefWidth="200" onAction="#filterByStatus"/></HBox>
                 <TableView fx:id="accountTable" prefHeight="350">
@@ -66,7 +80,6 @@
                 </TableView>
             </VBox>
 
-            <!-- Loans -->
             <VBox fx:id="loanSection" spacing="15" visible="false" managed="false">
                 <TableView fx:id="loanTable" prefHeight="350">
                     <columns>
@@ -82,7 +95,6 @@
                 </TableView>
             </VBox>
 
-            <!-- Cards -->
             <VBox fx:id="cardSection" spacing="15" visible="false" managed="false">
                 <TableView fx:id="cardTable" prefHeight="350">
                     <columns>

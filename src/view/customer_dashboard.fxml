@@ -1,46 +1,230 @@
 <?xml version="1.0" encoding="UTF-8"?>
-
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
+<?import javafx.scene.image.ImageView?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="controller.CustomerDashboardController">
+
+<BorderPane xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.CustomerDashboardController"
+            prefWidth="1280.0" prefHeight="720.0"
+            stylesheets="@../style/customer_style.css">
+    <left>
+        <VBox spacing="12" styleClass="sidebar">
+            <padding><Insets top="40" left="15" right="15" bottom="15"/></padding>
+            <Label text="SmartBank360" styleClass="sidebar-title"/>
+            <Separator/>
+            <Button text="🏠 Dashboard" onAction="#showDashboard" styleClass="sidebar-button"/>
+            <Button fx:id="profileBtn" text="👤 My Profile" onAction="#showProfile" styleClass="sidebar-button"/>
+            <Button text="💼 Create Account" onAction="#showCreateAccount" styleClass="sidebar-button"/>
+            <Button text="💸 View Balance" onAction="#showViewBalance" styleClass="sidebar-button"/>
+            <Button text="📝 Request Service" onAction="#showSendMoney" styleClass="sidebar-button"/>
+
+            <Button fx:id="notificationBtn" onAction="#showNotifications" styleClass="sidebar-button">
+                <graphic>
+                    <StackPane>
+                        <Label text="🔔 Notifications" style="-fx-text-fill: white;"/>
+                        <Label fx:id="notifDot" text="●" visible="false" style="-fx-text-fill:red; -fx-font-size:12; -fx-translate-x:60; -fx-translate-y:-10;"/>
+                    </StackPane>
+                </graphic>
+            </Button>
+
+            <Button text="🧾 Transaction History" onAction="#showTransactionHistory" styleClass="sidebar-button"/>
+            <Button text="💳 Card Request" onAction="#showCardRequest" styleClass="sidebar-button"/>
+            <Button text="💰 Loan Request" onAction="#showLoanRequest" styleClass="sidebar-button"/>
+            <Button fx:id="logoutBtn" text="🚪 Logout" onAction="#handleLogout" styleClass="sidebar-button logout"/>
+        </VBox>
+    </left>
+
     <top>
-        <HBox spacing="10" style="-fx-background-color: #2C3E50;">
-            <padding>
-                <Insets top="10" right="10" bottom="10" left="10"/>
-            </padding>
-            <Label text="SmartBank360 – Customer Panel"
-                   style="-fx-text-fill: white; -fx-font-size: 20px; -fx-font-weight: bold;"/>
-            <Pane HBox.hgrow="ALWAYS"/>
-            <Button fx:id="logoutBtn" text="Logout"/>
+        <HBox styleClass="top-bar" alignment="CENTER">
+            <padding><Insets top="15" bottom="15" left="25" right="25"/></padding>
+            <Label text="Customer Panel" styleClass="top-title"/>
+            <Label fx:id="welcomeLabel" text="Welcome, User" styleClass="admin-label"/>
         </HBox>
     </top>
 
     <center>
-        <VBox spacing="20" alignment="CENTER">
-            <padding>
-                <Insets top="20" right="20" bottom="20" left="20"/>
-            </padding>
+        <StackPane fx:id="mainContent" styleClass="content-area" style="-fx-padding: 0;">
+            <VBox fx:id="dashboardView" alignment="TOP_CENTER" spacing="10" visible="true" managed="true"
+                  style="-fx-background-color: transparent; -fx-padding: 0 0 0 0;">
 
-            <Label text="🎉 Welcome, [Customer Name]" fx:id="welcomeLabel" style="-fx-font-size: 18px;"/>
+                <ImageView fx:id="bankLogo" fitWidth="400" fitHeight="170" preserveRatio="true" />
 
-            <HBox spacing="20" alignment="CENTER">
-                <Button text="💼 Create Account" fx:id="createAccBtn"/>
-                <Button text="💸 View Balance" fx:id="viewBalanceBtn"/>
-                <Button text="📝 Request Service" fx:id="requestServiceBtn"/>
-                <Button text="👤 My Profile" onAction="#openProfile"/>
-                <Button text="🔔 View Notifications" fx:id="notifBtn" onAction="#showNotifications"/>
-                <Button text="🧾 View History" onAction="#openTransactionHistory"/>
-                <Button text="💳 Card Request" onAction="#openCardRequest"/>
-                <Button text="💰 Loan Request" onAction="#openLoanRequest"/>
+                <HBox spacing="30" alignment="CENTER">
+                    <VBox style="-fx-background-color: linear-gradient(to right, #6a11cb, #2575fc);
+                                 -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 5);
+                                 -fx-background-radius: 18; -fx-padding: 20; -fx-pref-width: 350;">
+                        <Label text="Account Number" style="-fx-text-fill: white; -fx-font-size: 15;" />
+                        <Label fx:id="accNumberLabel" text="---- ---- ---- ----"
+                               style="-fx-text-fill: yellow; -fx-font-size: 20; -fx-font-weight: bold;" />
+                        <Label fx:id="accTypeLabel" text="Saving Account"
+                               style="-fx-text-fill: #fff; -fx-font-size: 13; -fx-opacity: 0.9;" />
+                    </VBox>
 
+                    <VBox style="-fx-background-color: linear-gradient(to right, #8e2de2, #4a00e0);
+                                 -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.3), 10, 0, 0, 5);
+                                 -fx-background-radius: 18; -fx-padding: 20; -fx-pref-width: 350;">
+                        <Label text="Current Balance" style="-fx-text-fill: white; -fx-font-size: 15;" />
+                        <Label fx:id="balanceLabel" text="৳ 0.00"
+                               style="-fx-text-fill: white; -fx-font-size: 22; -fx-font-weight: bold;" />
+                    </VBox>
+                </HBox>
 
+                <HBox spacing="40" alignment="CENTER" style="-fx-padding: 20;">
 
-            </HBox>
+                    <VBox style="-fx-background-color: linear-gradient(to bottom right, #ece9f7, #ffffff);
+                                 -fx-background-radius: 15;
+                                 -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8,0,0,4);
+                                 -fx-padding:15; -fx-pref-width: 450;">
+                        <Label text="📊 Account Statistics" style="-fx-font-size: 15; -fx-font-weight: bold; -fx-text-fill:#4a00e0;" />
+                        <BarChart fx:id="statChart" prefHeight="230" prefWidth="400" style="-fx-background-color: transparent; -fx-border-color: #ddd; -fx-border-width: 0 0 1 0;">
+                            <xAxis><CategoryAxis label="Month"/></xAxis>
+                            <yAxis><NumberAxis label="Amount"/></yAxis>
+                        </BarChart>
+                    </VBox>
 
-            <Label text="🧾 Recent Activity / Notifications" style="-fx-font-weight: bold;"/>
-            <TextArea fx:id="activityArea" prefRowCount="6" prefWidth="500" editable="false"/>
-        </VBox>
+                    <VBox style="-fx-background-color: linear-gradient(to bottom right, #f8f7ff, #f0ecff);
+                                 -fx-background-radius: 15;
+                                 -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.15), 8,0,0,4);
+                                 -fx-padding:15; -fx-pref-width: 450;">
+                        <Label text="🧾 Recent Transactions" style="-fx-font-size: 15; -fx-font-weight: bold; -fx-text-fill:#6a11cb;" />
+                        <ListView fx:id="recentTransactions" prefHeight="230" style="-fx-background-color: transparent; -fx-border-color: #ccc; -fx-border-radius: 5;"/>
+                        <Button text="View All" onAction="#showTransactionHistory"
+                                style="-fx-background-color: #6a11cb; -fx-text-fill:white; -fx-background-radius:20; -fx-padding:5 15; -fx-font-size:13;" />
+                    </VBox>
+                </HBox>
+
+            </VBox>
+            <VBox fx:id="createAccountView" spacing="12" visible="false" managed="false" alignment="CENTER">
+                <Label text="📝 Open New Bank Account" styleClass="chart-title"/>
+
+                <HBox spacing="10">
+                    <Label text="Account Type:"/>
+                    <ComboBox fx:id="accountTypeBox" prefWidth="200"/>
+                </HBox>
+
+                <HBox spacing="10">
+                    <Label text="Branch:"/>
+                    <ComboBox fx:id="branchBox" prefWidth="200"/>
+                </HBox>
+
+                <HBox spacing="10">
+                    <Label text="Currency:"/>
+                    <ComboBox fx:id="currencyBox" prefWidth="200"/>
+                </HBox>
+
+                <HBox spacing="10">
+                    <Label text="Initial Deposit (৳):"/>
+                    <TextField fx:id="depositField" prefWidth="200"/>
+                </HBox>
+
+                <HBox spacing="10">
+                    <Label text="Need Debit Card?"/>
+                    <CheckBox fx:id="cardCheck"/>
+                </HBox>
+
+                <HBox spacing="10">
+                    <Label text="Nominee Name:"/>
+                    <TextField fx:id="nomineeField" prefWidth="200"/>
+                </HBox>
+
+                <HBox spacing="10">
+                    <Label text="Mobile Number:"/>
+                    <TextField fx:id="mobileField" prefWidth="200"/>
+                </HBox>
+
+                <HBox spacing="10">
+                    <Label text="National ID (NID):"/>
+                    <TextField fx:id="nidField" prefWidth="200"/>
+                </HBox>
+
+                <HBox spacing="10">
+                    <Label text="Address:"/>
+                    <TextField fx:id="addressField" prefWidth="200"/>
+                </HBox>
+
+                <HBox spacing="10">
+                    <Label text="Email:"/>
+                    <TextField fx:id="emailField" prefWidth="200"/>
+                </HBox>
+
+                <HBox spacing="10">
+                    <Label text="Create Password:"/>
+                    <PasswordField fx:id="passwordField" prefWidth="200"/>
+                </HBox>
+
+                <HBox spacing="10">
+                    <Label text="Confirm Password:"/>
+                    <PasswordField fx:id="confirmPasswordField" prefWidth="200"/>
+                </HBox>
+
+                <Button fx:id="submitBtn" text="✅ Create Account"
+                        style="-fx-background-color: #27ae60; -fx-text-fill: white;"/>
+
+                <Label fx:id="messageLabel" style="-fx-text-fill: green;"/>
+            </VBox>
+
+            <VBox fx:id="viewBalanceView" spacing="10" visible="false" managed="false">
+                <Label text="💳 Loading Balance Info..." styleClass="chart-title"/>
+            </VBox>
+
+            <VBox fx:id="sendMoneyView" spacing="15" visible="false" managed="false" alignment="CENTER">
+                <Label text="💳 Send Money / Recharge / Pay Bills" styleClass="chart-title"/>
+
+                <HBox spacing="10">
+                    <Label text="Transaction Type:"/>
+                    <ComboBox fx:id="transactionTypeBox" prefWidth="220"/>
+                </HBox>
+
+                <HBox spacing="10">
+                    <Label text="To (Account/Mobile No):"/>
+                    <TextField fx:id="recipientField" prefWidth="220"/>
+                </HBox>
+
+                <HBox spacing="10">
+                    <Label text="Amount (৳):"/>
+                    <TextField fx:id="amountField" prefWidth="220"/>
+                </HBox>
+
+                <Button fx:id="sendBtn" text="✅ Confirm Transaction" style="-fx-background-color: #27ae60; -fx-text-fill: white;"/>
+                <Label fx:id="sendMoneyMessageLabel" style="-fx-text-fill: green;"/>
+            </VBox>
+
+            <VBox fx:id="profileView" visible="false" managed="false">
+                <padding><Insets bottom="20.0" left="20.0" right="20.0" top="20.0" /></padding>
+                <Label styleClass="chart-title" text="My Profile" />
+                <Label fx:id="profileDetailsLabel" text="Loading profile details..." wrapText="true" />
+            </VBox>
+
+            <VBox fx:id="loanView" visible="false" managed="false">
+                <padding><Insets bottom="20.0" left="20.0" right="20.0" top="20.0" /></padding>
+                <Label text="💰 My Loan Requests" styleClass="chart-title"/>
+                <Label text="Loan request details will be shown here."/>
+            </VBox>
+
+            <VBox fx:id="cardView" visible="false" managed="false">
+                <padding><Insets bottom="20.0" left="20.0" right="20.0" top="20.0" /></padding>
+                <Label text="🆔 My Card Requests" styleClass="chart-title"/>
+                <Label text="Card request details will be shown here."/>
+            </VBox>
+
+            <VBox fx:id="historyView" visible="false" managed="false">
+                <padding><Insets bottom="20.0" left="20.0" right="20.0" top="20.0" /></padding>
+                <Label text="🧾 Transaction History" styleClass="chart-title"/>
+                <VBox spacing="8" style="-fx-padding: 15;" />
+            </VBox>
+
+            <VBox fx:id="notificationsView" spacing="10" visible="false" managed="false" styleClass="content-box">
+                <padding>
+                    <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+                </padding>
+                <Label text="🔔 Notifications" styleClass="chart-title"/>
+                <ListView fx:id="notificationList" prefHeight="400" style="-fx-background-color: white; -fx-border-radius: 8;"/>
+            </VBox>
+        </StackPane>
     </center>
 </BorderPane>

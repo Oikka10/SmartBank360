@@ -14,6 +14,8 @@ public class Main extends Application {
         scene.getStylesheets().add(getClass().getResource("/style/login.css").toExternalForm());
         primaryStage.setTitle("SmartBank360 - Login");
         primaryStage.setScene(scene);
+        primaryStage.centerOnScreen();
+
         primaryStage.show();
     }
 

@@ -1,40 +1,58 @@
 /* login.css */
-
 .root {
     -fx-font-family: "Segoe UI", sans-serif;
 }
 
-.text-field,
-.password-field {
-    -fx-background-radius: 10;
-    -fx-border-radius: 10;
-    -fx-padding: 10;
-    -fx-font-size: 14px;
-    -fx-border-color: #ffffff30;
-    -fx-background-color: #ffffff20;
+/* 🔹 Input Fields (Username & Password) */
+.login-field {
+    -fx-background-color: rgba(255,255,255,0.1);
     -fx-text-fill: white;
+    -fx-background-radius: 25;
+    -fx-border-radius: 25;
+    -fx-border-color: rgba(255,255,255,0.3);
+    -fx-border-width: 1;
+    -fx-font-size: 15px;
+    -fx-padding: 10 15 10 15;
+}
+.login-field:focused {
+    -fx-border-color: #00c6ff;
+    -fx-effect: dropshadow(gaussian, rgba(0,198,255,0.4), 10, 0, 0, 2);
 }
 
-.label {
-    -fx-text-fill: white;
+/* 🔹 Placeholder (PromptText) */
+.login-field .text {
+    -fx-fill: #bbbbbb;
 }
 
+/* 🔹 Glow Login Button */
+.glow-button {
+    -fx-background-color: linear-gradient(to right, #6a11cb, #2575fc);
+    -fx-text-fill: white;
+    -fx-background-radius: 25;
+    -fx-border-radius: 25;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-padding: 10 20;
+    -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.2), 8, 0, 0, 2);
+}
+.glow-button:hover {
+    -fx-background-color: linear-gradient(to right, #2575fc, #6a11cb);
+    -fx-cursor: hand;
+    -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.4), 10, 0, 0, 3);
+}
+
+/* 🔹 Hyperlink */
 .hyperlink {
-    -fx-text-fill: #00BFFF;
+    -fx-text-fill: #00c6ff;
     -fx-underline: true;
 }
-
-.glow-button {
-    -fx-background-color: linear-gradient(to right, #00c6ff, #0072ff);
-    -fx-text-fill: white;
-    -fx-background-radius: 20;
-    -fx-border-radius: 20;
-    -fx-font-size: 14px;
-    -fx-padding: 10 20;
-    -fx-effect: dropshadow(gaussian, rgba(255,255,255,0.3), 5,0,0,1);
+.hyperlink:hover {
+    -fx-text-fill: #4acaff;
 }
 
-.glow-button:hover {
-    -fx-background-color: linear-gradient(to right, #0072ff, #00c6ff);
-    -fx-cursor: hand;
+/* 🔹 Footer Label */
+.footer-label {
+    -fx-text-fill: white;
+    -fx-opacity: 0.8;
+    -fx-font-size: 12px;
 }

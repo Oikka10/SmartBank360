@@ -51,6 +51,28 @@ public class TransactionHistoryController {
             colRecipient.setCellValueFactory(data -> data.getValue().recipientProperty());
             colAmount.setCellValueFactory(data -> data.getValue().amountProperty().asObject());
 
+            // ✅ Add this after setting column factories:
+            colAmount.setCellFactory(column -> new TableCell<>() {
+                @Override
+                protected void updateItem(Double amount, boolean empty) {
+                    super.updateItem(amount, empty);
+                    if (empty || amount == null) {
+                        setText(null);
+                        setStyle("");
+                    } else {
+                        setText(String.format("%.2f", amount));
+                        // ✅ Color based on type (Debit or Credit)
+                        String type = getTableView().getItems().get(getIndex()).getType();
+                        if ("Debit".equalsIgnoreCase(type)) {
+                            setStyle("-fx-text-fill: red; -fx-font-weight: bold;");
+                        } else {
+                            setStyle("-fx-text-fill: green; -fx-font-weight: bold;");
+                        }
+                    }
+                }
+            });
+            // End of added code
+
             transactionTable.setItems(list);
             emptyLabel.setVisible(list.isEmpty());
 

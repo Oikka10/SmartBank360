@@ -20,7 +20,8 @@
 .sidebar {
     -fx-background-color: #2C3E50;
 }
-.sidebar-button {
+/* This section has been updated and moved to the bottom for priority */
+/* .sidebar-button {
     -fx-background-color: transparent;
     -fx-text-fill: white;
     -fx-font-size: 16px;
@@ -28,7 +29,7 @@
     -fx-alignment: center-left;
     -fx-cursor: hand;
     -fx-font-weight: bold;
-}
+} */
 .sidebar-button:hover {
     -fx-background-color: #34495E;
 }
@@ -62,4 +63,22 @@
     -fx-font-size: 28px;
     -fx-font-weight: bold;
     -fx-text-fill: #6a11cb;
+}
+
+/* --- Specific Fixes for Button Text and Red Dot Positioning --- */
+.sidebar-button {
+    -fx-text-fill: white !important;      /* Force white text for all sidebar buttons */
+    -fx-background-color: transparent; /* Ensure background is transparent */
+    -fx-font-size: 14px; /* Adjust font size as requested */
+    -fx-padding: 10 20;
+    -fx-alignment: center-left;
+    -fx-cursor: hand;
+    -fx-font-weight: bold;
+}
+
+.red-dot {
+    -fx-text-fill: red;      /* Dot will be red */
+    -fx-font-size: 12px;
+    -fx-translate-x: 70;    /* Push dot to end of button text */
+    -fx-translate-y: -10;   /* Slightly above */
 }

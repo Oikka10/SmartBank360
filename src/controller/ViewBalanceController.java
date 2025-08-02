@@ -50,3 +50,5 @@ public class ViewBalanceController {
         stage.close();
     }
 }
+
+
