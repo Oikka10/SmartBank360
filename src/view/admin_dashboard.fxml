@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane fx:id="mainPane" prefWidth="1280.0" prefHeight="720.0"
+            xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controller.AdminDashboardController"
+            stylesheets="@../style/admin_style.css">
+
+    <left>
+        <VBox fx:id="sidebar" spacing="15" styleClass="sidebar" prefWidth="200">
+            <padding><Insets top="40" left="15" right="15" bottom="15"/></padding>
+            <Label text="SmartBank360" styleClass="sidebar-title"/>
+            <Separator/>
+            <Button text="📊 Dashboard" onAction="#showDashboard" styleClass="sidebar-button"/>
+            <Button text="👤 Officers" onAction="#showOfficers" styleClass="sidebar-button"/>
+            <Button text="🧑‍💻 Customers" onAction="#showCustomers" styleClass="sidebar-button"/>
+            <Button text="📥 Requests" onAction="#showRequests" styleClass="sidebar-button"/>
+            <Button text="🚪 Logout" onAction="#handleLogout" styleClass="sidebar-button logout"/> </VBox>
+    </left>
+
+    <top>
+        <HBox styleClass="top-bar" alignment="CENTER" spacing="20">
+            <padding><Insets top="15" bottom="15" left="25" right="25"/></padding>
+            <Label text="👑 Admin Panel" styleClass="top-title"/>
+            <Label fx:id="adminNameLabel" text="Welcome, Admin" styleClass="admin-label"/>
+        </HBox>
+    </top>
+
+    <center>
+        <StackPane fx:id="mainContent" styleClass="content-area" style="-fx-padding: 20;">
+
+            <VBox fx:id="dashboardView" spacing="25" visible="true" managed="true">
+                <HBox spacing="30">
+                    <VBox styleClass="money-card purple-card">
+                        <Label text="Total Balance" styleClass="card-title"/>
+                        <Label fx:id="totalBalanceLabel" text="0.00" styleClass="card-amount"/>
+                    </VBox>
+                    <VBox styleClass="money-card blue-card">
+                        <Label text="Monthly Income" styleClass="card-title"/>
+                        <Label fx:id="incomeLabel" text="0.00" styleClass="card-amount"/>
+                    </VBox>
+                    <VBox styleClass="money-card green-card">
+                        <Label text="Monthly Expense" styleClass="card-title"/>
+                        <Label fx:id="expenseLabel" text="0.00" styleClass="card-amount"/>
+                    </VBox>
+                </HBox>
+
+                <HBox spacing="40">
+                    <VBox styleClass="chart-container" prefWidth="600" prefHeight="300">
+                        <Label text="📈 Charts &amp; Analytics" styleClass="chart-title"/>
+                        <Pane styleClass="chart-placeholder"/>
+                    </VBox>
+
+                    <VBox styleClass="transaction-box" prefWidth="350" prefHeight="300">
+                        <Label text="📝 Latest Requests" styleClass="chart-title"/>
+                        <ListView fx:id="recentList" prefHeight="250"/>
+                    </VBox>
+                </HBox>
+            </VBox>
+
+            <VBox fx:id="officerView" spacing="15" visible="false" managed="false">
+                <Label text="👤 Add New Officer" styleClass="chart-title" />
+                <HBox spacing="15">
+                    <TextField fx:id="officerNameField" promptText="Full Name" />
+                    <TextField fx:id="officerEmailField" promptText="Email" />
+                    <PasswordField fx:id="officerPasswordField" promptText="Password" />
+                    <TextField fx:id="officerDepartmentField" promptText="Department" /> <Button text="➕ Add Officer" onAction="#addOfficer"
+                                                                                                 style="-fx-background-color: #6c5ce7; -fx-text-fill: white; -fx-font-weight: bold;
+                                   -fx-background-radius: 8; -fx-padding: 8 16;"/>
+                </HBox>
+                <Label text="📋 All Officers" styleClass="chart-title" />
+                <TableView fx:id="officerTable" prefHeight="300" prefWidth="800">
+                    <columns>
+                        <TableColumn fx:id="nameCol" text="Name" prefWidth="200"/>
+                        <TableColumn fx:id="emailCol" text="Email" prefWidth="250"/>
+                        <TableColumn fx:id="passwordCol" text="Password" prefWidth="200"/>
+                        <TableColumn fx:id="departmentCol" text="Department" prefWidth="150"/> </columns>
+                </TableView>
+            </VBox>
+
+            <VBox fx:id="customerView" spacing="15" visible="false" managed="false">
+                <Label text="🧑‍💻 Customer Management" styleClass="chart-title"/>
+                <TableView fx:id="customerTable" prefWidth="750">
+                    <columns>
+                        <TableColumn fx:id="custNameCol" text="Name" prefWidth="200"/>
+                        <TableColumn fx:id="custAccCol" text="Account No" prefWidth="200"/>
+                        <TableColumn fx:id="custBalanceCol" text="Balance" prefWidth="150"/>
+                    </columns>
+                </TableView>
+            </VBox>
+
+            <VBox fx:id="requestView" spacing="15" visible="false" managed="false">
+                <Label text="📥 All Requests" styleClass="chart-title"/>
+                <VBox spacing="10">
+                    <ListView fx:id="requestList" prefHeight="220" prefWidth="600"/>
+                    <Button text="❌ Delete Selected Request" onAction="#deleteSelectedRequest"
+                            style="-fx-background-color: #d63031; -fx-text-fill: white; -fx-font-weight: bold;
+                                   -fx-background-radius: 8; -fx-padding: 8 16; -fx-cursor: hand;"/>
+                </VBox>
+            </VBox>
+
+        </StackPane>
+    </center>
+</BorderPane>
