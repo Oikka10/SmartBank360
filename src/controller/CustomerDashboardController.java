@@ -8,7 +8,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import utils.DatabaseConnector;
 import db.DatabaseConnection;
 
 import java.io.IOException;
@@ -23,11 +22,15 @@ import controller.CardRequestController;
 import controller.TransactionHistoryController;
 import controller.ViewBalanceController;
 import controller.LoanRequestController;
-import controller.CustomerProfileController;
 
 import javafx.scene.layout.BorderPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.stage.FileChooser;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+
 
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.XYChart;
@@ -66,9 +69,15 @@ public class CustomerDashboardController {
     @FXML private Label accTypeLabel;
     @FXML private Label balanceLabel;
 
-    // This is the crucial FXML field linking to your ListView
+    // FXML elements for the Profile view
+    @FXML private ImageView profileImage;
+    @FXML private TextField profileNameField, profileMobileField, profileNidField, profileAddressField, profileEmailField;
+    @FXML private Button editBtn;
+    @FXML private Button saveBtn;
+
+
     @FXML private BarChart<String, Number> statChart;
-    @FXML private ListView<String> recentTransactions; // Ensure this matches fx:id="recentTransactions"
+    @FXML private ListView<String> recentTransactions;
 
     private String currentUsername;
 
@@ -88,7 +97,7 @@ public class CustomerDashboardController {
             logoutBtn.getStyleClass().add("logout");
         }
         if (profileBtn != null) {
-            profileBtn.setOnAction(e -> showCustomerProfile());
+            profileBtn.setOnAction(e -> showProfile());
         }
         checkUnreadNotifications();
 
@@ -98,7 +107,6 @@ public class CustomerDashboardController {
             System.out.println("Logo not found: " + e.getMessage());
         }
 
-        // This is where loadDummyTransactions is called
         loadDummyTransactions();
         loadDashboardAccountInfo();
 
@@ -123,8 +131,7 @@ public class CustomerDashboardController {
             dashboardView.setVisible(true);
             dashboardView.setManaged(true);
             loadDashboardAccountInfo();
-            // loadRecentTransactions(); // You might switch back to this for real data later
-            loadDummyTransactions(); // Ensure dummy data is loaded when navigating to dashboard
+            loadDummyTransactions();
             checkUnreadNotifications();
         }
     }
@@ -181,34 +188,15 @@ public class CustomerDashboardController {
 
     @FXML
     public void showProfile() {
-        showCustomerProfile();
-    }
-
-    @FXML
-    private void showCustomerProfile() {
         hideAllViews();
-
         if (profileView != null) {
             profileView.setVisible(true);
             profileView.setManaged(true);
-
-            try {
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/view/customer_profile.fxml"));
-                BorderPane profilePane = loader.load();
-
-                CustomerProfileController controller = loader.getController();
-                if (controller != null) {
-                    controller.setUsername(currentUsername);
-                } else {
-                    System.err.println("Error: CustomerProfileController is null after loading FXML.");
-                }
-
-                profileView.getChildren().setAll(profilePane);
-                checkUnreadNotifications();
-            } catch (Exception e) {
-                System.out.println("Error loading customer_profile.fxml: " + e.getMessage());
-                e.printStackTrace();
-            }
+            loadProfile();
+            setFieldsEditable(false);
+            if (saveBtn != null) saveBtn.setDisable(true);
+            if (editBtn != null) editBtn.setDisable(false);
+            checkUnreadNotifications();
         }
     }
 
@@ -221,7 +209,7 @@ public class CustomerDashboardController {
 
             loadNotifications();
 
-            try (Connection conn = DatabaseConnector.getConnection()) {
+            try (Connection conn = DatabaseConnection.connect()) {
                 PreparedStatement markRead = conn.prepareStatement(
                         "UPDATE notifications SET is_read=1 WHERE username=?"
                 );
@@ -241,7 +229,7 @@ public class CustomerDashboardController {
 
     private void loadNotifications() {
         notificationList.getItems().clear();
-        try (Connection conn = DatabaseConnector.getConnection()) {
+        try (Connection conn = DatabaseConnection.connect()) {
             String sql = "SELECT message, created_at FROM notifications WHERE username=? ORDER BY created_at DESC";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, currentUsername);
@@ -260,7 +248,7 @@ public class CustomerDashboardController {
     }
 
     private void markNotificationsAsRead() {
-        try (Connection conn = DatabaseConnector.getConnection()) {
+        try (Connection conn = DatabaseConnection.connect()) {
             PreparedStatement stmt = conn.prepareStatement("UPDATE notifications SET is_read=TRUE WHERE username=?");
             stmt.setString(1, currentUsername);
             stmt.executeUpdate();
@@ -421,7 +409,7 @@ public class CustomerDashboardController {
             PreparedStatement stmt = null;
 
             try {
-                conn = DatabaseConnector.getConnection();
+                conn = DatabaseConnection.connect();
                 String sql = "INSERT INTO accounts (account_type, branch, currency, deposit, card_needed, nominee, mobile, nid, address, email, password, account_number, status, username) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
                 stmt = conn.prepareStatement(sql);
                 stmt.setString(1, accType);
@@ -541,7 +529,6 @@ public class CustomerDashboardController {
                     updateStmt.executeUpdate();
                 }
 
-
                 String sql = "INSERT INTO transactions (username, type, recipient, amount, datetime) VALUES (?, ?, ?, ?, ?)";
                 stmt = conn.prepareStatement(sql);
                 stmt.setString(1, currentUsername);
@@ -577,7 +564,7 @@ public class CustomerDashboardController {
     }
 
     private void loadDashboardInfo() {
-        try (Connection conn = DatabaseConnector.getConnection()) {
+        try (Connection conn = DatabaseConnection.connect()) {
             String sql = "SELECT status FROM accounts WHERE username = ? ORDER BY id DESC LIMIT 1";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, currentUsername);
@@ -596,7 +583,7 @@ public class CustomerDashboardController {
     }
 
     private void loadDashboardAccountInfo() {
-        try (Connection conn = DatabaseConnector.getConnection()) {
+        try (Connection conn = DatabaseConnection.connect()) {
             String sql = "SELECT account_number, account_type, balance FROM accounts WHERE username=? AND status='Approved' ORDER BY id DESC LIMIT 1";
             PreparedStatement stmt = conn.prepareStatement(sql);
             stmt.setString(1, currentUsername);
@@ -617,7 +604,7 @@ public class CustomerDashboardController {
     }
 
     private void loadRecentTransactions() {
-        try (Connection conn = DatabaseConnector.getConnection()) {
+        try (Connection conn = DatabaseConnection.connect()) {
             PreparedStatement stmt = conn.prepareStatement(
                     "SELECT type, amount, datetime FROM transactions WHERE username=? ORDER BY datetime DESC LIMIT 5");
             stmt.setString(1, currentUsername);
@@ -661,7 +648,7 @@ public class CustomerDashboardController {
     }
 
     private void checkUnreadNotifications() {
-        try (Connection conn = DatabaseConnector.getConnection()) {
+        try (Connection conn = DatabaseConnection.connect()) {
             PreparedStatement stmt = conn.prepareStatement(
                     "SELECT COUNT(*) FROM notifications WHERE username=? AND is_read=0"
             );
@@ -702,5 +689,138 @@ public class CustomerDashboardController {
                 }
             }
         });
+    }
+
+    // New methods for the profile view
+    private void loadProfile() {
+        try (Connection conn = DatabaseConnection.connect()) {
+            String sqlAccounts = "SELECT nominee, mobile, nid, address, email FROM accounts WHERE username = ? ORDER BY id DESC LIMIT 1";
+            PreparedStatement stmtAccounts = conn.prepareStatement(sqlAccounts);
+            stmtAccounts.setString(1, currentUsername);
+            ResultSet rsAccounts = stmtAccounts.executeQuery();
+
+            if (rsAccounts.next()) {
+                profileNameField.setText(rsAccounts.getString("nominee"));
+                profileMobileField.setText(rsAccounts.getString("mobile"));
+                profileNidField.setText(rsAccounts.getString("nid"));
+                profileAddressField.setText(rsAccounts.getString("address"));
+                profileEmailField.setText(rsAccounts.getString("email"));
+            } else {
+                statusLabel.setText("⚠️ No account found.");
+            }
+
+            String sqlUsers = "SELECT photo_path FROM users WHERE username = ?";
+            PreparedStatement stmtUsers = conn.prepareStatement(sqlUsers);
+            stmtUsers.setString(1, currentUsername);
+            ResultSet rsUsers = stmtUsers.executeQuery();
+
+            if (rsUsers.next() && rsUsers.getString("photo_path") != null) {
+                String pathFromDb = rsUsers.getString("photo_path");
+                File photoFile = new File("src" + pathFromDb);
+                if (photoFile.exists()) {
+                    profileImage.setImage(new Image(photoFile.toURI().toString()));
+                } else {
+                    profileImage.setImage(new Image(getClass().getResource("/images/default_user.png").toExternalForm()));
+                }
+            } else {
+                profileImage.setImage(new Image(getClass().getResource("/images/default_user.png").toExternalForm()));
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            statusLabel.setText("❌ Error loading profile.");
+        }
+    }
+
+    @FXML
+    private void enableEdit() {
+        setFieldsEditable(true);
+        statusLabel.setText("");
+        saveBtn.setDisable(false);
+        editBtn.setDisable(true);
+    }
+
+    @FXML
+    private void saveChanges() {
+        try (Connection conn = DatabaseConnection.connect()) {
+            String sql = "UPDATE accounts SET nominee=?, mobile=?, nid=?, address=?, email=? WHERE username=?";
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            stmt.setString(1, profileNameField.getText());
+            stmt.setString(2, profileMobileField.getText());
+            stmt.setString(3, profileNidField.getText());
+            stmt.setString(4, profileAddressField.getText());
+            stmt.setString(5, profileEmailField.getText());
+            stmt.setString(6, currentUsername);
+
+            int rows = stmt.executeUpdate();
+
+            if (rows > 0) {
+                statusLabel.setText("✅ Profile updated successfully!");
+                setFieldsEditable(false);
+                saveBtn.setDisable(true);
+                editBtn.setDisable(false);
+            } else {
+                statusLabel.setText("⚠️ Update failed. Try again.");
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            statusLabel.setText("❌ Error while saving.");
+        }
+    }
+
+    @FXML
+    private void handleUploadPhoto() {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Select Profile Photo");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.jpeg"));
+        File selectedFile = fileChooser.showOpenDialog(null);
+
+        if (selectedFile != null) {
+            try {
+                String fileExtension = "";
+                int i = selectedFile.getName().lastIndexOf('.');
+                if (i > 0) {
+                    fileExtension = selectedFile.getName().substring(i);
+                }
+
+                String uniqueFileName = currentUsername + fileExtension;
+                File destDir = new File("src/images/profile_pics");
+                if (!destDir.exists()) {
+                    destDir.mkdirs();
+                }
+                File destFile = new File(destDir, uniqueFileName);
+
+                Files.copy(selectedFile.toPath(), destFile.toPath(), StandardCopyOption.REPLACE_EXISTING);
+
+                String relativePath = "/images/profile_pics/" + uniqueFileName;
+                updateUserPhotoPathInDB(relativePath);
+                loadProfile();
+            } catch (Exception e) {
+                showAlert("Error", "Could not upload photo: " + e.getMessage());
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void updateUserPhotoPathInDB(String path) {
+        try (Connection conn = DatabaseConnection.connect()) {
+            PreparedStatement stmt = conn.prepareStatement("UPDATE users SET photo_path=? WHERE username=?");
+            stmt.setString(1, path);
+            stmt.setString(2, currentUsername);
+            stmt.executeUpdate();
+            showAlert("Success", "Photo uploaded successfully!");
+        } catch (SQLException e) {
+            showAlert("Database Error", "Could not update photo path in the database: " + e.getMessage());
+            e.printStackTrace();
+        }
+    }
+
+    private void setFieldsEditable(boolean editable) {
+        profileNameField.setEditable(editable);
+        profileMobileField.setEditable(editable);
+        profileNidField.setEditable(editable);
+        profileAddressField.setEditable(editable);
+        profileEmailField.setEditable(editable);
     }
 }

@@ -32,7 +32,7 @@
 
                 <HBox alignment="CENTER_LEFT" spacing="10"
                       style="-fx-background-color: rgba(255,255,255,0.1); -fx-background-radius: 25; -fx-padding: 10; -fx-pref-width: 300;">
-                    <Label text="  🔒" style="-fx-text-fill: white; -fx-font-size: 16;" />
+                    <Label text="   🔒" style="-fx-text-fill: white; -fx-font-size: 16;" />
                     <PasswordField fx:id="passwordField" promptText="Password"
                                    styleClass="login-field" style="-fx-background-color: transparent; -fx-text-fill: white;"
                                    HBox.hgrow="ALWAYS" visible="true" managed="true"/>
